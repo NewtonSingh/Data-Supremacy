@@ -48,12 +48,12 @@ tr = ames_train_hot[predictors]
 library(gbm)
 
 
-ntrees = 500
+ntrees = 1000
 
 model = gbm.fit(x = tr,
   y = train$target,distribution = "bernoulli",n.trees = ntrees,
-  shrinkage = 0.005,interaction.depth =25,
-  n.minobsinnode = 15,nTrain = round(n_trn*0.85),
+  shrinkage = 0.005,interaction.depth =22,
+  n.minobsinnode = 11,nTrain = round(n_trn*0.85),
   verbose = TRUE,bag.fraction = 0.8)
 
 gbm.perf(model)
