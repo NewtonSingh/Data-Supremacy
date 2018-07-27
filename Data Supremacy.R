@@ -94,6 +94,7 @@ testing =  train[-ind,-c(1)]
 
 library(xgboost)
 library(dplyr)
+library(matrix)
 # Create matrix one-hot encoding
 tr_label = training[,"target"]
 
@@ -196,33 +197,33 @@ for(i in 1:k)
   
   # Train-test Split
   
-  smp_size = floor(0.80*nrow(train_data))
+  smp_size = floor(0.80*nrow(train))
   
-  index = sample(seq_len(nrow(train_data)),size = smp_size)
+  index = sample(seq_len(nrow(train),size = smp_size)
   
-  train = train_data[index,-c(1)]
+  tr = train[index,-c(1)]
   
-  test  = train_data[-index,-c(1)]
+  te  = train[-index,-c(1)]
   
-  train[] = lapply(train, function(x) {
+  train[] = lapply(tr, function(x) {
     if(is.factor(x)) as.numeric(as.character(x)) else x
 })
 
-  test[] = lapply(test, function(x) {
+  test[] = lapply(te, function(x) {
     if(is.factor(x)) as.numeric(as.character(x)) else x
 })
   
   # Fitting the logistic eqn
   
-  model = glm(train$target~.,family = binomial,data = train)
+  model = glm(tr$target~.,family = binomial,data = tr)
   
   # Predicting results
   
-  results_pr = predict(model,test,type = "response")
+  results_pr = predict(model,te,type = "response")
   
-  results = ifelse(test = results_pr > 0.5,yes = 1,no = 0)
+  results = ifelse(te = results_pr > 0.5,yes = 1,no = 0)
   
-  answers = test$target
+  answers = te$target
   
   mis_classification = mean(answers!=results)
   
@@ -232,9 +233,9 @@ for(i in 1:k)
   
   con_mat = table(data = results,reference = answers)
   
-  fp_rate[i] = con_mat[2]/(nrow(train_data)-smp_size)
+  fp_rate[i] = con_mat[2]/(nrow(train)-smp_size)
   
-  fn_rate[i] = con_mat[3]/(nrow(train_data)-smp_size)
+  fn_rate[i] = con_mat[3]/(nrow(train)-smp_size)
   
   p_bar$step()
   
@@ -244,9 +245,9 @@ for(i in 1:k)
 
 mean(acc)
 
-pred_test = predict(object = model,test_data[,-c(1)],type = "prob")
+pred_test = predict(object = model,test[,-c(1)],type = "prob")
 
-subm_2 = data.frame(test_data$enrollee_id,pred_test)
+subm_2 = data.frame(test$enrollee_id,pred_test)
 
 names(subm_2)[] = c("enrollee_id","target")
 
