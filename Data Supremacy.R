@@ -29,6 +29,8 @@ train_1$training_hours = scale(x = train$training_hours,center = T)
 
 test_1$training_hours = scale(x = test$training_hours,center = T)
 
+library(caret)
+
 one_hot = dummyVars(~ ., train_1, fullRank = FALSE)
 
 library(dplyr)
