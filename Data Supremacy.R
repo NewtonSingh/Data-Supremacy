@@ -238,9 +238,9 @@ for(i in 1:k)
 
 mean(acc)
 
-pred_test = predict(object = model,test[,-c(1)],type = "prob")
+pred_test = predict(object = model,test[,-c(1)],type = "response")
 
-subm_2 = data.frame(test_data$enrollee_id,pred_test)
+subm_2 = data.frame(test$enrollee_id,pred_test)
 
 names(subm_2)[] = c("enrollee_id","target")
 
