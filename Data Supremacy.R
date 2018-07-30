@@ -170,6 +170,10 @@ library(plyr)
 #install.packages("caret")
 library(caret) # Confusion matrix
 
+# Loading files                  
+train = read.csv(file = "C:/Users/HP/Documents/train_tar.csv",header = TRUE)
+test  = read.csv(file = "C:/Users/HP/Documents/test_tar.csv",header = TRUE)
+                  
 # false pos rate 
 
 fp_rate = NULL
